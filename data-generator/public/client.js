@@ -1,25 +1,9 @@
-function sendBrightness(time) {
-  let value = 0
-  switch (time) {
-    case 'morning':
-      value = 6
-      break
-    case 'day':
-      value = 8
-      break
-    case 'evening':
-      value = 4
-      break
-    case 'night':
-      value = 2
-      break
-    default:
-      break
-  }
+function sendBrightness(value) {
+  const region = document.getElementById('region').value
 
   const xhr = new XMLHttpRequest()
 
-  const jsonStr = JSON.stringify({ value })
+  const jsonStr = JSON.stringify({ value, region })
 
   xhr.open('POST', '/brightness')
   xhr.setRequestHeader('Content-type', 'application/json')
@@ -28,10 +12,10 @@ function sendBrightness(time) {
   xhr.onreadystatechange = function () {
     if (xhr.readyState != 4) return
     if (xhr.status == 200) {
-      console.log('success', value)
+      console.log('success', value, region)
     }
     else {
-      console.error('Не удалось связаться с сервером!')
+      console.error('Server connection failed')
     }
   }
 }
