@@ -1,8 +1,7 @@
 const express = require('express')
 const path = require('path')
-const { dataGetting } = require('../dweet')
 const app = express()
-const port = 3001
+const port = 3002
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
@@ -13,9 +12,22 @@ app.get('/', (req, res) => {
   })
 })
 
-app.get('/brightness', async (req, res) => {
-  const data = await dataGetting()
-  res.send(data)
+const regions = {
+  'north': false,
+  'east': false,
+  'south': false,
+  'west': false
+}
+
+app.post('/lamp', (req) => {
+  const { state, region } = req.body
+  regions[region] = state
+  console.log(regions)
+})
+
+app.get('/brightness/', async (req, res) => {
+  const { region } = req.query
+  res.send(regions[region])
 })
 
 app.listen(port, () => {

@@ -1,19 +1,25 @@
-function getBrightness() {
-  const xhr = new XMLHttpRequest()
+function resetRegion() {
+  document.getElementById('data').innerHTML = 'Waiting for data'
+}
 
-  xhr.open('GET', '/brightness')
+function update() {
+  const region = document.getElementById('region').value
+
+  const params = 'region=' + encodeURIComponent(region)
+
+  const xhr = new XMLHttpRequest()
+  xhr.open('GET', '/brightness?' + params)
   xhr.send()
   xhr.onreadystatechange = function () {
     if (xhr.readyState != 4) return
     if (xhr.status == 200) {
-      const brightness = JSON.parse(xhr.responseText).with.find(({ thing }) => thing === "iot-dimmer").content.data
-      const lampBrightness = brightness < 8 ? Math.round(10 - brightness) : 0
-      document.body.innerHTML = `External brightness = ${brightness} <br>lamp brightness = ${lampBrightness}`
+      const result = xhr.responseText
+      document.getElementById('data').innerHTML = `Is enabled = ${result}`
     }
     else {
-      console.error('Не удалось связаться с сервером!')
+      console.error('Server connection failed')
     }
   }
 }
 
-setInterval(getBrightness, 7000)
+setInterval(update, 4000)

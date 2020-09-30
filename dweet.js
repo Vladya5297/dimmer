@@ -30,16 +30,22 @@ function dataGetting() {
     const options = {
       hostname: 'dweet.io',
       port: 443,
-      path: `/get/latest/dweet/for/${thing}`,
+      path: `/get/dweets/for/${thing}`,
       method: 'GET'
     }
     const req = https.request(options, (res) => {
       res.on('data', (data) => {
-        resolve(data.toString())
+        let result
+        try {
+          result = JSON.parse(data.toString()).with.map((event) => event.content.data)
+        } catch {
+          resolve()
+        }
+        resolve(result)
       })
     })
     req.on('error', (error) => {
-      reject(error)
+      console.error(error)
     })
     req.end()
   })

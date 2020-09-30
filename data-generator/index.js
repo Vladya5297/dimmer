@@ -13,10 +13,9 @@ app.get('/', (req, res) => {
   })
 })
 
-function generateData(brightness, regionIndex) {
+function generateData(brightness, region) {
   return setInterval(() => {
-    const value = brightness + Math.random() * 2
-    const region = regionIndex
+    const value = Math.abs(brightness + Math.random() * 10 - 5)
     dataGeneration({
       value,
       region
@@ -26,33 +25,31 @@ function generateData(brightness, regionIndex) {
 }
 
 const values = {
-  'morning': 6,
-  'day': 8,
-  'evening': 4,
-  'night': 2
+  morning: 20,
+  day: 100,
+  evening: 40,
+  night: 2
 }
 
-const regions = {
-  'north': 0,
-  'east': 1,
-  'south': 2,
-  'west': 3
-}
+const regions = [
+  'north',
+  'east',
+  'south',
+  'west'
+]
 
 const senders = {}
 
-Object.values(regions).forEach(regionIndex => {
-  senders[regionIndex] = generateData(0, regionIndex)
+regions.forEach(region => {
+  senders[region] = generateData(0, region)
 })
 
 app.post('/brightness', (req, res) => {
   const { value, region } = req.body
   console.log(`Client send value: ${value} for region ${region}`)
   const valueIndex = values[value]
-  const regionIndex = regions[region]
-  clearInterval(senders[regionIndex])
-  senders[regionIndex] = generateData(valueIndex, regionIndex)
-  res.send()
+  clearInterval(senders[region])
+  senders[region] = generateData(valueIndex, region)
 })
 
 app.listen(port, () => {

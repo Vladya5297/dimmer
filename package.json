@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node ./data-generator & node ./lamp",
+    "data-generator": "node ./data-generator",
+    "application": "node ./application",
+    "lamp": "node ./lamp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
