@@ -19,10 +19,11 @@ const regions = {
   'west': false
 }
 
-app.post('/lamp', (req) => {
+app.post('/lamp', (req, res) => {
   const { state, region } = req.body
   regions[region] = state
   console.log(regions)
+  res.send('success')
 })
 
 app.get('/brightness/', async (req, res) => {

@@ -1,54 +1,33 @@
 const https = require('https')
-
+const axios = require('axios').default
 const thing = 'iot-dimmer'
 
-function dataGeneration(value) {
-  const data = JSON.stringify({
-    data: value
+function dataGeneration(data) {
+  axios({
+    method: 'post',
+    baseURL: 'https://dweet.io:443',
+    url: `/dweet/for/${thing}`,
+    data
   })
-
-  const options = {
-    hostname: 'dweet.io',
-    port: 443,
-    path: `/dweet/for/${thing}`,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': data.length
-    }
-  }
-  const req = https.request(options)
-  req.on('error', (error) => {
-    console.error(error)
-  })
-  req.write(data)
-  req.end()
+    .catch((error) => console.error('dweet.io error', error))
 }
 
 function dataGetting() {
-  return new Promise((resolve, reject) => {
-    const options = {
-      hostname: 'dweet.io',
-      port: 443,
-      path: `/get/dweets/for/${thing}`,
-      method: 'GET'
-    }
-    const req = https.request(options, (res) => {
-      res.on('data', (data) => {
+  return axios({
+      method: 'get',
+      baseURL: 'https://dweet.io:443',
+      url: `/get/dweets/for/${thing}`
+    })
+      .then(({ data }) => {
         let result
         try {
-          result = JSON.parse(data.toString()).with.map((event) => event.content.data)
-        } catch {
-          resolve()
+          result = data.with.map((event) => event.content)
+        } catch (error) {
+          console.error('dweet.io error with data:', data)
         }
-        resolve(result)
+        return result
       })
-    })
-    req.on('error', (error) => {
-      console.error(error)
-    })
-    req.end()
-  })
+      .catch((error) => console.error('dweet.io error', error))
 }
 
 module.exports = {

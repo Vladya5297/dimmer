@@ -5,21 +5,16 @@ function resetRegion() {
 function update() {
   const region = document.getElementById('region').value
 
-  const params = 'region=' + encodeURIComponent(region)
-
-  const xhr = new XMLHttpRequest()
-  xhr.open('GET', '/brightness?' + params)
-  xhr.send()
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState != 4) return
-    if (xhr.status == 200) {
-      const result = xhr.responseText
-      document.getElementById('data').innerHTML = `Is enabled = ${result}`
-    }
-    else {
+  axios.get('/brightness', {
+    params: { region }
+  })
+    .then(({ data }) => {
+      if (data === undefined) return
+      document.getElementById('data').innerHTML = `Is enabled = ${data}`
+    })
+    .catch(() => {
       console.error('Server connection failed')
-    }
-  }
+    })
 }
 
-setInterval(update, 4000)
+setInterval(update, 5000)

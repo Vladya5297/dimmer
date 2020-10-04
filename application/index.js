@@ -1,6 +1,7 @@
 const http = require('http')
 const express = require('express')
 const path = require('path')
+const axios = require('axios').default
 const { dataGetting } = require('../dweet')
 const app = express()
 const port = 3001
@@ -19,23 +20,14 @@ app.get('/brightness', async (req, res) => {
   res.send(data)
 })
 
-app.post('/lamp', (args) => {
-  const data = JSON.stringify(args.body)
-  const options = {
-    hostname: 'localhost',
-    port: 3002,
-    path: '/lamp',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-  const req = http.request(options)
-  req.on('error', (error) => {
-    console.error(error)
+app.post('/lamp', ({ body: data }) => {
+  axios({
+    method: 'post',
+    baseURL: 'http://localhost:3002',
+    url: '/lamp',
+    data
   })
-  req.write(data)
-  req.end()
+    .catch((error) => console.error('lamp server error', error))
 })
 
 app.listen(port, () => {
