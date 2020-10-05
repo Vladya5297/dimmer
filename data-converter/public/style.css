@@ -1,0 +1,13 @@
+.line {
+  margin: 5px;
+  padding: 5px;
+  border-bottom: solid 1px black;
+}
+
+.received {
+  color: green
+}
+
+.parsed {
+  color: blue;
+}

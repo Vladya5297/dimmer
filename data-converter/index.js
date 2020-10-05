@@ -19,7 +19,7 @@ function dataConverter(data) {
       elements.push({
         "type": "element",
         "name": "div",
-        "attributes":{ key, value: data[key] }
+        "attributes": { key, value: data[key] }
       })
     }
 
@@ -37,7 +37,7 @@ function dataConverter(data) {
     // HTML
     result = '<!DOCTYPE html>'
     for (const key in data) {
-      result += `<div id='${key}'>${data[key]}</div>`
+      result += `<div key='${key}' value='${data[key]}'></div>`
     }
   } else {
     // JSON
@@ -69,4 +69,12 @@ app.post('/data', (req, res) => {
 app.get('/rawdata', (req, res) => {
   res.send(dataQueue)
   dataQueue.splice(0, dataQueue.length)
+})
+
+app.get('/format', (req, res) => {
+  let result
+  for (const key in format) {
+    if (format[key]) result = key
+  }
+  res.send(result)
 })
