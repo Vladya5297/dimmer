@@ -1,17 +1,9 @@
-const express = require('express')
 const path = require('path')
 const { dataGeneration } = require('../dweet')
-const app = express()
-const port = 3000
+const { createServer } = require('../createServer')
+const axios = require('axios').default
 
-app.use(express.json())
-app.use(express.static(path.join(__dirname, 'public')))
-
-app.get('/', (req, res) => {
-  res.sendFile('index.html', {
-    root: path.join(__dirname, 'public'),
-  })
-})
+const app = createServer(path.resolve(__dirname, './public'), 3000)
 
 const values = {
   morning: 20,
@@ -31,11 +23,18 @@ function generateData(region) {
   setInterval(() => {
     const brightness = regions[region]
     const value = Math.abs(brightness + Math.random() * 10 - 5)
-    dataGeneration({
-      value,
-      region
-    })
+    const data = { value, region }
+    dataGeneration(data)
     console.log(`Sended: value = ${value} region = ${region}`)
+
+    // send to data-converter
+    axios({
+      method: 'post',
+      baseURL: 'http://localhost:3003',
+      url: '/data',
+      data
+    })
+      .catch(() => console.error('data-converter error'))
   }, 5000)
 }
 
@@ -48,8 +47,4 @@ app.post('/brightness', (req, res) => {
   console.log(`Client send value: ${value} for region ${region}`)
   regions[region] = values[value]
   res.send('success')
-})
-
-app.listen(port, () => {
-  console.log(`listening at http://localhost:${port}`)
 })

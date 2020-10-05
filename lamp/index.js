@@ -1,16 +1,7 @@
-const express = require('express')
 const path = require('path')
-const app = express()
-const port = 3002
+const { createServer } = require('../createServer')
 
-app.use(express.json())
-app.use(express.static(path.join(__dirname, 'public')))
-
-app.get('/', (req, res) => {
-  res.sendFile('index.html', {
-    root: path.join(__dirname, 'public'),
-  })
-})
+const app = createServer(path.resolve(__dirname, './public'), 3002)
 
 const regions = {
   'north': false,
@@ -29,8 +20,4 @@ app.post('/lamp', (req, res) => {
 app.get('/brightness/', async (req, res) => {
   const { region } = req.query
   res.send(regions[region])
-})
-
-app.listen(port, () => {
-  console.log(`listening at http://localhost:${port}`)
 })

@@ -1,19 +1,9 @@
-const http = require('http')
-const express = require('express')
 const path = require('path')
 const axios = require('axios').default
 const { dataGetting } = require('../dweet')
-const app = express()
-const port = 3001
+const { createServer } = require('../createServer')
 
-app.use(express.json())
-app.use(express.static(path.join(__dirname, 'public')))
-
-app.get('/', (req, res) => {
-  res.sendFile('index.html', {
-    root: path.join(__dirname, 'public'),
-  })
-})
+const app = createServer(path.resolve(__dirname, './public'), 3001)
 
 app.get('/brightness', async (req, res) => {
   const data = await dataGetting()
@@ -28,8 +18,4 @@ app.post('/lamp', ({ body: data }) => {
     data
   })
     .catch((error) => console.error('lamp server error', error))
-})
-
-app.listen(port, () => {
-  console.log(`listening at http://localhost:${port}`)
 })
