@@ -7,6 +7,7 @@
     "data-generator": "node ./data-generator",
     "application": "node ./application",
     "lamp": "node ./lamp",
+    "data-converter": "node ./data-converter",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
