@@ -43,7 +43,17 @@ function dataConverter(data) {
     // JSON
     result = JSON.stringify(data)
   }
-  console.log(result)
+
+  const dataToString = (data) => {
+    let result = '{'
+    for (const key in data) {
+      result += ` ${key}: ${data[key]} `
+    }
+    result += '}'
+    return result
+  }
+
+  console.log(`Received: ${dataToString(data)}\nResult: ${result}`)
   return result
 }
 
@@ -61,7 +71,6 @@ const dataQueue = []
 
 app.post('/data', (req, res) => {
   const data = req.body
-  console.log('Data received')
   dataQueue.push(dataConverter(data))
   res.send('success')
 })
