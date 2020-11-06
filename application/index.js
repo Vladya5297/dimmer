@@ -1,12 +1,19 @@
 const path = require('path')
 const axios = require('axios').default
 const { dataGetting } = require('../dweet')
+const { dataGettingMqtt } = require('../mqtt')
 const { createServer } = require('../createServer')
+const { protocol } = require('../protocol')
 
 const app = createServer(path.resolve(__dirname, './public'), 3001)
 
 app.get('/brightness', async (req, res) => {
-  const data = await dataGetting()
+  let data = []
+  if (protocol === 'http') {
+    data = await dataGetting()
+  } else if (protocol === 'mqtt') {
+    data = dataGettingMqtt()
+  }
   res.send(data)
 })
 

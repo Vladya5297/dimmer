@@ -1,6 +1,8 @@
 const path = require('path')
 const { dataGeneration } = require('../dweet')
+const { dataGenerationMqtt } = require('../mqtt')
 const { createServer } = require('../createServer')
+const { protocol } = require('../protocol')
 const axios = require('axios').default
 
 const app = createServer(path.resolve(__dirname, './public'), 3000)
@@ -24,8 +26,12 @@ function generateData(region) {
     const brightness = regions[region]
     const value = Math.abs(brightness + Math.random() * 10 - 5)
     const data = { value, region }
-    dataGeneration(data)
-    console.log(`Sended: value = ${value} region = ${region}`)
+    if (protocol === 'http') {
+      dataGeneration(data)
+    } else if (protocol === 'mqtt') {
+      dataGenerationMqtt(data)
+    }
+    console.log(`Sent: value = ${value} region = ${region}`)
 
     // send to data-converter
     axios({
