@@ -1,3 +1,3 @@
 module.exports = {
-  protocol: 'http' // http || mqtt
+  protocol: 'mqtt' // http || mqtt
 }

@@ -8,6 +8,7 @@
     "application": "node ./application",
     "lamp": "node ./lamp",
     "data-converter": "node ./data-converter",
+    "broker": "cd ./mosquitto && mosquitto.exe --verbose",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

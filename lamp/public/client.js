@@ -1,5 +1,5 @@
 function resetRegion() {
-  document.getElementById('data').innerHTML = 'Waiting for data'
+  document.getElementById('data').innerHTML = 'Ожидание данных'
 }
 
 function update() {
@@ -10,7 +10,11 @@ function update() {
   })
     .then(({ data }) => {
       if (data === undefined) return
-      document.getElementById('data').innerHTML = `Is enabled = ${data}`
+      const dataElem = document.getElementById('data')
+      dataElem.innerHTML = ''
+      const imgElem = document.createElement('img')
+      imgElem.setAttribute('src', `lamp_${data ? 'on' : 'off'}.png`)
+      dataElem.appendChild(imgElem)
     })
     .catch(() => {
       console.error('Server connection failed')

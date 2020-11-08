@@ -22,8 +22,8 @@ function getBrightness() {
         const currentRegion = document.getElementById('region').value
         if (currentRegion === region.toString()) {
           const lampsShouldBeEnabled = value < 25
-          document.getElementById('data').innerHTML = `External brightness = ${value} klx
-          <br>lamps should be enabled = ${lampsShouldBeEnabled}`
+          document.getElementById('data').innerHTML = `Освещенность = ${value} килолюксов
+          <br>Лампы должны быть включены = ${lampsShouldBeEnabled ? 'Да' : 'Нет'}`
         }
       })
     })
