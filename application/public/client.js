@@ -32,4 +32,15 @@ function getBrightness() {
     })
 }
 
+function getEnabled() {
+  const region = document.getElementById('region').value
+  axios.get('/enabled', {
+    params: { region }
+  })
+  .then(({ data }) => {
+    document.getElementById('enabled').innerHTML = `Лапмы включены = ${data ? 'Да' : 'Нет'}`
+  })
+}
+
+setInterval(getEnabled, 5000)
 setInterval(getBrightness, 10000)

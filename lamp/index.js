@@ -17,7 +17,7 @@ app.post('/lamp', (req, res) => {
   res.send('success')
 })
 
-app.get('/brightness/', async (req, res) => {
+app.get('/brightness', async (req, res) => {
   const { region } = req.query
   res.send(regions[region])
 })

@@ -14,6 +14,7 @@ function update() {
       dataElem.innerHTML = ''
       const imgElem = document.createElement('img')
       imgElem.setAttribute('src', `lamp_${data ? 'on' : 'off'}.png`)
+      imgElem.style.height = '200px'
       dataElem.appendChild(imgElem)
     })
     .catch(() => {

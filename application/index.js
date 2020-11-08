@@ -17,6 +17,16 @@ app.get('/brightness', async (req, res) => {
   res.send(data)
 })
 
+app.get('/enabled', (req, res) => {
+  const { region } = req.query
+  axios.get('/brightness', {
+    baseURL: 'http://localhost:3002',
+    params: { region }
+  }).then(({ data }) => {
+    res.send(data)
+  })
+})
+
 app.post('/lamp', ({ body: data }) => {
   axios({
     method: 'post',
